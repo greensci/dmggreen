@@ -1,0 +1,16 @@
+﻿  bus.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+  cpu.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\greens\source\repos\dmggreen\dmggreen\cpu.cpp(28,24): warning C4101: 'tempIF': unreferenced local variable
+C:\Users\greens\source\repos\dmggreen\dmggreen\cpu.cpp(28,32): warning C4101: 'tempIE': unreferenced local variable
+  dmggreen.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\greens\source\repos\dmggreen\dmggreen\dmggreen.cpp(41,28): warning C4244: 'initializing': conversion from 'std::streamoff' to 'unsigned int', possible loss of data
+C:\Users\greens\source\repos\dmggreen\dmggreen\dmggreen.cpp(64,20): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+  ext_instructions.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+  instructions.cpp
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.44.35207\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+  Generating Code...
+  dmggreen.vcxproj -> C:\Users\greens\source\repos\dmggreen\Debug\dmggreen.exe
