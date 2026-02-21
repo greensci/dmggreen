@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{E523B608-9F0A-47F8-8297-D4C8BD59F3FC}|dmggreen\\dmggreen.vcxproj|C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\dmggreen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E523B608-9F0A-47F8-8297-D4C8BD59F3FC}|dmggreen\\dmggreen.vcxproj|solutionrelative:dmggreen\\dmggreen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "dmggreen.cpp",
+              "DocumentMoniker": "C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\dmggreen.cpp",
+              "RelativeDocumentMoniker": "dmggreen\\dmggreen.cpp",
+              "ToolTip": "C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\dmggreen.cpp",
+              "RelativeToolTip": "dmggreen\\dmggreen.cpp",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABYAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-21T13:49:48.858Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

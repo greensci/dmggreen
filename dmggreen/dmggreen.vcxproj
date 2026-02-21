@@ -30,6 +30,13 @@
     <ClInclude Include="cpu.h" />
     <ClInclude Include="ext_instructions.h" />
     <ClInclude Include="instructions.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="dmggreen.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
