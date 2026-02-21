@@ -1,7 +1,7 @@
-# g dmggreen
-![icon](https://github.com/user-attachments/assets/66a5f954-e847-40e0-adb7-d31022f02765)
+# dmggreen
+<img width="64" height="64" alt="icon" src="https://github.com/user-attachments/assets/1492c1e7-9c98-4ad6-9615-f4e9a1da7779" />
 
-This is a Gameboy emulator made by a beginner on C++
+This is a Gameboy emulator made by me (a beginner) on C++.
 
 This is not really meant to be accurate or something, im just making it to learn C++ and emulation so..
 
