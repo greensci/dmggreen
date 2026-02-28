@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{E523B608-9F0A-47F8-8297-D4C8BD59F3FC}|dmggreen\\dmggreen.vcxproj|C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\ext_instructions.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{E523B608-9F0A-47F8-8297-D4C8BD59F3FC}|dmggreen\\dmggreen.vcxproj|solutionrelative:dmggreen\\ext_instructions.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E523B608-9F0A-47F8-8297-D4C8BD59F3FC}|dmggreen\\dmggreen.vcxproj|C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\dmggreen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{E523B608-9F0A-47F8-8297-D4C8BD59F3FC}|dmggreen\\dmggreen.vcxproj|solutionrelative:dmggreen\\dmggreen.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
@@ -19,6 +23,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ext_instructions.cpp",
+              "DocumentMoniker": "C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\ext_instructions.cpp",
+              "RelativeDocumentMoniker": "dmggreen\\ext_instructions.cpp",
+              "ToolTip": "C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\ext_instructions.cpp",
+              "RelativeToolTip": "dmggreen\\ext_instructions.cpp",
+              "ViewState": "AgIAAEcBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-02-21T14:53:47.335Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "dmggreen.cpp",
               "DocumentMoniker": "C:\\Users\\greens\\Documents\\GitHub\\dmggreen\\dmggreen\\dmggreen.cpp",
               "RelativeDocumentMoniker": "dmggreen\\dmggreen.cpp",
