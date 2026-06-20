@@ -144,7 +144,7 @@ void ExecuteExtInstruction(uint8_t opcode) {
 	case 0x5F: bit_n_r(3, AF.hi); break; // BIT 3, A
 
 
-
+		 
 	case 0x60: bit_n_r(4, BC.hi); break; // BIT 4, B
 	case 0x61: bit_n_r(4, BC.lo); break; // BIT 4, C
 	case 0x62: bit_n_r(4, DE.hi); break; // BIT 4, D

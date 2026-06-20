@@ -112,6 +112,8 @@ int main(int argc, char* argv[])
 		uint8_t opcode = ReadBus(PC);
         PC++;
         ExecuteOpcode(opcode);
+		dbg_update();
+		dbg_print();
     }
     std::cout << "halted!\n";
     printf("BC: 0x%04X\n", BC.full);

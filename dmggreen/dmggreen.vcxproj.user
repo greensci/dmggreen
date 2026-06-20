@@ -4,6 +4,7 @@
     <LocalDebuggerCommandArguments>"C:\Users\greens\source\repos\dmggreen\x64\Debug\06-ld r,r.gb"</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommand>$(TargetPath)</LocalDebuggerCommand>
+    <LocalDebuggerCommandArgumentsHistory>"C:\Users\greens\source\repos\dmggreen\x64\Debug\06-ld r,r.gb"|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LocalDebuggerCommandArguments>"C:\Users\greens\source\repos\dmggreen\x64\Debug\06-ld r,r.gb"</LocalDebuggerCommandArguments>
