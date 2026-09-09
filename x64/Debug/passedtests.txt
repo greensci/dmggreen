@@ -1,11 +1,11 @@
 01-special            - PASSED!!
 02-interrupts         -
-03-op sp,hl           -
+03-op sp,hl           - PASSED!!
 04-op r,imm           -
 05-op rp              -
 06-ld r,r             - PASSED!!
-07-jr,jp,call,ret,rst - FAILED
-08-misc instrs        -
+07-jr,jp,call,ret,rst - PASSED!!
+08-misc instrs        - PASSED!!
 09-op r,r             -
 10-bit ops            -
 11-op a,(hl)          -

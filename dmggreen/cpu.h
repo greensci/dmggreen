@@ -28,15 +28,22 @@ extern uint16_t SP;
 extern uint16_t PC;
 extern uint8_t currentOP;
 extern bool halted;
+extern bool IME;
+extern int ime_scheduled; // -1 = nothing pending
+
 extern int cycles;
 extern std::string logdata;
+extern bool debugLogs;
 
 extern bool exportOps;
 extern uint16_t tempPC;
+
 
 // Opcode execution
 void ExecuteOpcode(uint8_t op);
 std::string byteToHexString(uint8_t value);
 std::string wordToHexString(uint16_t value);
+void InitCpuLog();
+void CloseCpuLog();
 
 #endif // CPU_H

@@ -29,11 +29,8 @@ int main(int argc, char* argv[])
 	HL.lo = 0x4D;
 	SP = 0xFFFE;
 	PC = 0x100;
-	exportOps = true;
-#ifdef DEBUG
-	exportOps = false;
+	//exportOps = true;
 
-#endif // DEBUG
 
 		
 	
@@ -99,22 +96,22 @@ int main(int argc, char* argv[])
 		}
     }
 	
-	std::ofstream configFile("cpulogs.log");
-
-
-
-	configFile << "";
-
-	configFile.close();
+	InitCpuLog();
 	WriteBus(0xDFFD, 0x00);
     
-    while(!halted) {
+	while (!halted || (ReadBus(0xFFFF) & ReadBus(0xFF0F) & 0x1F)) {
 		uint8_t opcode = ReadBus(PC);
-        PC++;
-        ExecuteOpcode(opcode);
-		dbg_update();
-		dbg_print();
-    }
+		PC++;
+		ExecuteOpcode(opcode);
+
+		if (ime_scheduled > 0) {
+			ime_scheduled--;
+			if (ime_scheduled == 0) { IME = true; ime_scheduled = -1; }
+		}
+
+		CheckInterrupts();
+	}
+	CloseCpuLog();
     std::cout << "halted!\n";
     printf("BC: 0x%04X\n", BC.full);
 }

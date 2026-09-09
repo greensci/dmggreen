@@ -11,6 +11,7 @@
 const char* flagNames[] = { "Z", "N", "H", "C" };
 
 
+
 void setFlag(Flag flag, bool value) {
 	if (value)
 		AF.lo |= flag;
@@ -24,17 +25,17 @@ bool getFlag(Flag flag) {
 
 void halt() {
 	halted = true;
-	printf("HALT");
+	if(debugLogs) printf("HALT");
 }
 void nop() {
 	cycles += 4;
-	printf("NOP");
+	if(debugLogs) printf("NOP");
 }
 void ld_rr_d16(uint16_t& reg, uint8_t n1, uint8_t n2) {
 	reg = (n2 << 8) | n1;
 	cycles += 12;
 	PC += 2;
-	printf("LD RR, $%02X%02X", n2, n1);
+	if(debugLogs) printf("LD RR, $%02X%02X", n2, n1);
 }
 void ld_addr_r(uint16_t& rr, uint8_t r, int ifthing = 0) {
 
@@ -47,12 +48,12 @@ void ld_addr_r(uint16_t& rr, uint8_t r, int ifthing = 0) {
 		rr++;
 	}
 	cycles += 8;
-	printf("LD ($%04X), R", rr);
+	if(debugLogs) printf("LD ($%04X), R", rr);
 }
 void inc_rr(uint16_t& rr) {
 	rr += 1;
 	cycles += 8;
-	printf("INC RR");
+	if(debugLogs) printf("INC RR");
 }
 void inc_r(uint8_t& r) {
 
@@ -65,7 +66,7 @@ void inc_r(uint8_t& r) {
 
 	r = result;
 	cycles += 4;
-	printf("INC R");
+	if(debugLogs) printf("INC R");
 }
 void dec_r(uint8_t& r) {
 
@@ -78,14 +79,14 @@ void dec_r(uint8_t& r) {
 
 	r = result;
 	cycles += 4;
-	printf("DEC R");
+	if(debugLogs) printf("DEC R");
 }
 void ld_r_d8(uint8_t& r, uint8_t n) {
 
 	r = n;
 	cycles += 4;
 	PC++;
-	printf("LD R, 0x%02X", n);
+	if(debugLogs) printf("LD R, 0x%02X", n);
 }
 void rlca() {
 	uint8_t& r = AF.hi;
@@ -98,7 +99,7 @@ void rlca() {
 	setFlag(FLAG_H, false);
 	setFlag(FLAG_C, bit7);
 	cycles += 4;
-	printf("RLCA");
+	if(debugLogs) printf("RLCA");
 }
 void ld_a16_sp(uint8_t lo, uint8_t hi) {
 	uint16_t addr = (hi << 8) | lo;
@@ -106,7 +107,7 @@ void ld_a16_sp(uint8_t lo, uint8_t hi) {
 	WriteBus(addr + 1, (SP >> 8) & 0xFF);
 	cycles += 20;
 	PC += 2;
-	printf("LD ($%04X), SP", addr);
+	if(debugLogs) printf("LD ($%04X), SP", addr);
 
 }
 void add_hl_rr(uint16_t rr) {
@@ -120,7 +121,7 @@ void add_hl_rr(uint16_t rr) {
 	setFlag(FLAG_N, false);
 
 	cycles += 8;
-	printf("ADD HL, RR");
+	if(debugLogs) printf("ADD HL, RR");
 }
 void ld_r_addr(uint8_t& r, uint16_t& rr, int ifthing = 0) {
 
@@ -135,13 +136,13 @@ void ld_r_addr(uint8_t& r, uint16_t& rr, int ifthing = 0) {
 	}
 
 	cycles += 8;
-	printf("LD R, ($%04X)", rr);
+	if(debugLogs) printf("LD R, ($%04X)", rr);
 }
 void dec_rr(uint16_t& rr) {
 
 	rr -= 1;
 	cycles += 8;
-	printf("DEC RR");
+	if(debugLogs) printf("DEC RR");
 }
 void rrca() {
 	uint8_t& r = AF.hi;
@@ -154,7 +155,7 @@ void rrca() {
 	setFlag(FLAG_N, false); // N is always cleared
 	setFlag(FLAG_H, false); // H is always cleared
 	cycles += 4;
-	printf("RRCA");
+	if(debugLogs) printf("RRCA");
 }
 void rla() {
 	uint8_t& A = AF.hi;
@@ -168,13 +169,13 @@ void rla() {
 	setFlag(FLAG_N, false); // Always cleared  
 	setFlag(FLAG_H, false); // Always cleared
 	cycles += 4;
-	printf("RLA"); // Fixed instruction name
+	if(debugLogs) printf("RLA"); // Fixed instruction name
 }
 void jr_n(int8_t offset) { // JR S8 : Adds the given value to PC counter
 	PC++;
 	PC += offset;
 	cycles += 12;   // JR takes 3 cycles when jumped
-	printf("JR %+d", offset); // ignore
+	if(debugLogs) printf("JR %+d", offset); // ignore
 }
 void rra() {
 	uint8_t& r = AF.hi;
@@ -188,7 +189,7 @@ void rra() {
 	setFlag(FLAG_N, false); // Always cleared
 	setFlag(FLAG_H, false); // Always cleared
 	cycles += 4;
-	printf("RRA");
+	if(debugLogs) printf("RRA");
 }
 void jr_f(int8_t offset, Flag flag, bool ifNot) {
 
@@ -204,7 +205,7 @@ void jr_f(int8_t offset, Flag flag, bool ifNot) {
 		cycles += 8;   // 8 cycles for not taken
 	}
 
-	printf("JR %cF, %02X", ifNot ? 'N' : ' ', offset);
+	if(debugLogs) printf("JR %cF, %02X", ifNot ? 'N' : ' ', offset);
 }
 void daa() {
 	uint8_t& A = AF.hi;
@@ -242,14 +243,14 @@ void daa() {
 	setFlag(FLAG_C, new_carry);
 
 	cycles += 4;
-	printf("DAA");
+	if(debugLogs) printf("DAA");
 }
 void cpl() {
 	AF.hi = ~AF.hi;         // A = NOOOT A!!!!!!!!
 	setFlag(FLAG_N, true);
 	setFlag(FLAG_H, true);
 	cycles += 4;
-	printf("CPL");
+	if(debugLogs) printf("CPL");
 }
 void inc_addr(uint16_t address) {
 	// Read from memory at the given address
@@ -265,7 +266,7 @@ void inc_addr(uint16_t address) {
 	setFlag(FLAG_H, (old_value & 0x0F) == 0x0F);
 
 	cycles += 12;
-	printf("INC ($%04X)\n", address);
+	if(debugLogs) printf("INC ($%04X)\n", address);
 }
 void dec_addr(uint16_t address) {
 	// Read from memory at the given address
@@ -278,10 +279,10 @@ void dec_addr(uint16_t address) {
 	// Set flags
 	setFlag(FLAG_Z, result == 0);
 	setFlag(FLAG_N, true);
-	setFlag(FLAG_H, (old_value & 0x0F) == 0x0F);
+	setFlag(FLAG_H, (old_value & 0x0F) == 0x00);
 
 	cycles += 12;
-	printf("DEC ($%04X)\n", address);
+	if(debugLogs) printf("DEC ($%04X)\n", address);
 }
 void ld_addr_d8(uint16_t& address, uint8_t n) {
 
@@ -290,7 +291,7 @@ void ld_addr_d8(uint16_t& address, uint8_t n) {
 
 	cycles += 12;
 	PC++;
-	printf("LD ($%04X), 0x%02X", address, n);
+	if(debugLogs) printf("LD ($%04X), 0x%02X", address, n);
 }
 void scf() {
 	setFlag(FLAG_N, false);
@@ -298,7 +299,7 @@ void scf() {
 	setFlag(FLAG_C, true);
 	// Z flag is unaffected
 	cycles += 4;
-	printf("SCF");
+	if(debugLogs) printf("SCF");
 }
 void ccf() {
 	bool current_carry = getFlag(FLAG_C);
@@ -307,12 +308,12 @@ void ccf() {
 	setFlag(FLAG_H, false);
 	// Z flag is unaffected
 	cycles += 8;
-	printf("CCF");
+	if(debugLogs) printf("CCF");
 }
 void ld_r_r(uint8_t& r, uint8_t n) {
 	r = n;
 	cycles += 4;
-	printf("LD R, R");
+	if(debugLogs) printf("LD R, R");
 }
 void add_r_r(uint8_t& reg1, uint8_t reg2) {
 	uint16_t result = reg1 + reg2;
@@ -325,7 +326,7 @@ void add_r_r(uint8_t& reg1, uint8_t reg2) {
 
 	reg1 = static_cast<uint8_t>(result);
 	cycles += 4;
-	printf("ADD A, R");
+	if(debugLogs) printf("ADD A, R");
 }
 void add_r_addr(uint8_t& reg1, uint16_t addr) {
 	uint8_t value = ReadBus(addr);  // Read the value from memory
@@ -339,7 +340,7 @@ void add_r_addr(uint8_t& reg1, uint16_t addr) {
 
 	reg1 = static_cast<uint8_t>(result);
 	cycles += 8;
-	printf("ADD A, ($%04X)", addr);
+	if(debugLogs) printf("ADD A, ($%04X)", addr);
 }
 void adc_r_r(uint8_t& reg1, uint8_t reg2) {
 	int carry = getFlag(FLAG_C) ? 1 : 0;
@@ -354,22 +355,23 @@ void adc_r_r(uint8_t& reg1, uint8_t reg2) {
 	cycles += 4;
 
 
-	printf("ADC A, R");
+	if(debugLogs) printf("ADC A, R");
 }
 void adc_r_addr(uint8_t& reg1, uint16_t addr) {
 	uint8_t carry = getFlag(FLAG_C) ? 1 : 0;
 	uint8_t value = ReadBus(addr);  // Read once and cache
 	uint16_t result = reg1 + value + carry;
+	uint8_t old_reg1 = reg1;
 	reg1 = static_cast<uint8_t>(result);
 	// Set flags
-	setFlag(FLAG_H, ((reg1 & 0x0F) + (value & 0x0F) + carry) > 0x0F);
+	setFlag(FLAG_H, ((old_reg1 & 0x0F) + (value & 0x0F) + carry) > 0x0F);
 	setFlag(FLAG_C, result > 0xFF);
 
 
 	setFlag(FLAG_Z, reg1 == 0);
 	setFlag(FLAG_N, false);
 	cycles += 8;
-	printf("ADC A, ($%04X)", addr);
+	if(debugLogs) printf("ADC A, ($%04X)", addr);
 }
 void sub_r_r(uint8_t& reg1, uint8_t reg2) {
 	uint8_t old_reg1 = reg1;
@@ -383,7 +385,7 @@ void sub_r_r(uint8_t& reg1, uint8_t reg2) {
 
 	reg1 = result;
 	cycles += 4;
-	printf("SUB A, R");
+	if(debugLogs) printf("SUB A, R");
 }
 void sub_r_addr(uint8_t& reg1, uint16_t addr) {
 	uint8_t value = ReadBus(addr);
@@ -398,7 +400,7 @@ void sub_r_addr(uint8_t& reg1, uint16_t addr) {
 
 	reg1 = result;
 	cycles += 8;
-	printf("SUB A, ($%04X)\n", addr);
+	if(debugLogs) printf("SUB A, ($%04X)\n", addr);
 }
 void sbc_r_r(uint8_t& reg1, uint8_t reg2) {
 	uint8_t a = reg1;
@@ -414,7 +416,7 @@ void sbc_r_r(uint8_t& reg1, uint8_t reg2) {
 	setFlag(FLAG_Z, reg1 == 0);
 	setFlag(FLAG_N, true);
 	cycles += 4;
-	printf("SBC A, R");
+	if(debugLogs) printf("SBC A, R");
 }
 void sbc_r_addr(uint8_t& reg1, uint16_t addr) {
 	uint8_t a = reg1;
@@ -430,7 +432,7 @@ void sbc_r_addr(uint8_t& reg1, uint16_t addr) {
 	setFlag(FLAG_Z, reg1 == 0);
 	setFlag(FLAG_N, true);
 	cycles += 8;
-	printf("SBC A, ($%04X)", addr);
+	if(debugLogs) printf("SBC A, ($%04X)", addr);
 }
 void and_r_r(uint8_t& reg1, uint8_t reg2) {
 	reg1 &= reg2;
@@ -439,7 +441,7 @@ void and_r_r(uint8_t& reg1, uint8_t reg2) {
 	setFlag(FLAG_H, true);
 	setFlag(FLAG_C, false);
 	cycles += 4;
-	printf("AND A, R");
+	if(debugLogs) printf("AND A, R");
 }
 void and_r_addr(uint8_t& reg1, uint16_t addr) {
 	uint8_t value = ReadBus(addr);
@@ -450,7 +452,7 @@ void and_r_addr(uint8_t& reg1, uint16_t addr) {
 	setFlag(FLAG_H, true);
 	setFlag(FLAG_C, false);
 	cycles += 8;
-	printf("AND A, ($%04X)", addr);
+	if(debugLogs) printf("AND A, ($%04X)", addr);
 }
 void xor_r_r(uint8_t& reg1, uint8_t reg2) {
 	reg1 ^= reg2;
@@ -461,7 +463,7 @@ void xor_r_r(uint8_t& reg1, uint8_t reg2) {
 	setFlag(FLAG_H, false);
 	setFlag(FLAG_C, false);
 	cycles += 4;
-	printf("XOR A, R");
+	if(debugLogs) printf("XOR A, R");
 }
 void xor_r_addr(uint8_t& reg1, uint16_t addr) {
 	reg1 ^= ReadBus(addr);
@@ -471,7 +473,7 @@ void xor_r_addr(uint8_t& reg1, uint16_t addr) {
 	setFlag(FLAG_H, false);
 	setFlag(FLAG_C, false);
 	cycles += 8;
-	printf("XOR A, ($%04X)", addr);
+	if(debugLogs) printf("XOR A, ($%04X)", addr);
 }
 void or_r_r(uint8_t& reg1, uint8_t reg2) {
 	reg1 |= reg2;
@@ -481,7 +483,7 @@ void or_r_r(uint8_t& reg1, uint8_t reg2) {
 	setFlag(FLAG_H, false);
 	setFlag(FLAG_C, false);
 	cycles += 4;
-	printf("OR A, R");
+	if(debugLogs) printf("OR A, R");
 }
 void or_r_addr(uint8_t& reg1, uint16_t addr) {
 	reg1 |= ReadBus(addr);
@@ -491,7 +493,7 @@ void or_r_addr(uint8_t& reg1, uint16_t addr) {
 	setFlag(FLAG_H, false);
 	setFlag(FLAG_C, false);
 	cycles += 8;
-	printf("OR A, ($%04X)", addr);
+	if(debugLogs) printf("OR A, ($%04X)", addr);
 }
 
 void cp_r_r(uint8_t& reg1, uint8_t reg2) {
@@ -505,7 +507,7 @@ void cp_r_r(uint8_t& reg1, uint8_t reg2) {
 	setFlag(FLAG_C, a < b);                    // Carry: borrow needed
 
 	cycles += 4;
-	printf("CP A, R");
+	if(debugLogs) printf("CP A, R");
 }
 void cp_r_addr(uint8_t& reg1, uint16_t addr) {
 	uint8_t value = ReadBus(addr);  // Read from memory
@@ -518,7 +520,7 @@ void cp_r_addr(uint8_t& reg1, uint16_t addr) {
 	setFlag(FLAG_C, a < value);                    // Carry: borrow needed
 
 	cycles += 8;
-	printf("CP A, ($%04X)", addr);
+	if(debugLogs) printf("CP A, ($%04X)", addr);
 }
 void ret_f(Flag flag, bool ifNot) {
 	cycles += 8;
@@ -531,14 +533,14 @@ void ret_f(Flag flag, bool ifNot) {
 		PC = (high << 8) | low;
 		cycles += 12;  // Total 20
 	}
-	printf("RET %c%s\n", ifNot ? 'N' : ' ', flagNames[flag]);
+	if(debugLogs) printf("RET %c%s\n", ifNot ? 'N' : ' ', flagNames[flag]);
 }
 void pop_rr(uint16_t& rr) {
 	uint8_t low = ReadBus(SP++);   // Read low byte and increment
 	uint8_t high = ReadBus(SP++);  // Read high byte and increment
 	rr = (high << 8) | low;
 	cycles += 12;
-	printf("POP RR");
+	if(debugLogs) printf("POP RR");
 }
 void jp_f(Flag flag, uint8_t low, uint8_t high, bool ifNot) {
 	bool conditionMet = getFlag(flag);
@@ -554,12 +556,12 @@ void jp_f(Flag flag, uint8_t low, uint8_t high, bool ifNot) {
 		cycles += 12;  // Cycles for not taken
 		PC += 2;
 	}
-	printf("JP %cF, $%04X", ifNot ? 'N' : ' ', addr);
+	if(debugLogs) printf("JP %cF, $%04X", ifNot ? 'N' : ' ', addr);
 }
 void jp_a16(uint8_t low, uint8_t high) {
 	PC = (high << 8) | low;
 	cycles += 16;
-	printf("JP $%04X", (high << 8) | low);
+	if(debugLogs) printf("JP $%04X", (high << 8) | low);
 }
 void call_f_a16(Flag flag, uint8_t low, uint8_t high, bool ifNot) {
 	bool conditionMet = getFlag(flag);
@@ -578,13 +580,13 @@ void call_f_a16(Flag flag, uint8_t low, uint8_t high, bool ifNot) {
 		cycles += 12;
 	}
 
-	printf("CALL %c%s, $%04X", ifNot ? 'N' : ' ', flagNames[flag], addr);
+	if(debugLogs) printf("CALL %c%s, $%04X", ifNot ? 'N' : ' ', flagNames[flag], addr);
 }
 void push_rr(uint16_t rr) {
 	WriteBus(--SP, (rr >> 8) & 0xFF);   // Pre-decrement
 	WriteBus(--SP, rr & 0xFF);          // Pre-decrement
 	cycles += 16;
-	printf("PUSH RR");
+	if(debugLogs) printf("PUSH RR");
 }
 void rst_addr(uint8_t address) {
 	// Push return address onto stack (current PC points to next instruction)
@@ -597,14 +599,14 @@ void rst_addr(uint8_t address) {
 	PC = address;
 
 	cycles += 16;
-	printf("RST $%02X", address);
+	if(debugLogs) printf("RST $%02X", address);
 }
 void ret() {
 	uint8_t low = ReadBus(SP++);
 	uint8_t high = ReadBus(SP++);
 	PC = (high << 8) | low;
 	cycles += 16;
-	printf("RET");
+	if(debugLogs) printf("RET");
 }
 void call_a16(uint8_t low, uint8_t high) {
 	uint16_t addr = (high << 8) | low;
@@ -617,15 +619,20 @@ void call_a16(uint8_t low, uint8_t high) {
 
 	PC = addr;
 	cycles += 24;
-	printf("CALL $%04X", addr);
+	if(debugLogs) printf("CALL $%04X", addr);
 }
 void reti() {
-	printf("RETI (WIP)");
+	uint8_t low = ReadBus(SP++);
+	uint8_t high = ReadBus(SP++);
+	IME = true;
+	PC = (high << 8) | low;
+	cycles += 16;
+	if(debugLogs) printf("RETI (WIP)");
 }
 void jp_hl() {
 	PC = HL.full;  // Jump to address in HL
 	cycles += 4;   // JP HL takes 4 clock cycles (1 machine cycle)
-	printf("JP HL");
+	if(debugLogs) printf("JP HL");
 }
 void ldh_a8_r(uint8_t n, bool twobyte = false) {
 	uint16_t address = 0xFF00 + n;  // Calculate address in HRAM
@@ -636,7 +643,7 @@ void ldh_a8_r(uint8_t n, bool twobyte = false) {
 		cycles += 4;
 		PC++;
 	}
-	printf("LD (%04X), R", n);
+	if(debugLogs) printf("LD (%04X), R", n);
 }
 void add_sp_s8(int8_t offset) {
 
@@ -653,7 +660,7 @@ void add_sp_s8(int8_t offset) {
 	PC++;
 
 	cycles += 16;
-	printf("ADD SP, %+d", offset);
+	if(debugLogs) printf("ADD SP, %+d", offset);
 }
 void ld_a16_a(uint8_t low, uint8_t high) {
 	// Read 16-bit address (little-endian)
@@ -664,7 +671,7 @@ void ld_a16_a(uint8_t low, uint8_t high) {
 
 	cycles += 16;
 	PC += 2;
-	printf("LD ($%04X), A", address);
+	if(debugLogs) printf("LD ($%04X), A", address);
 }
 void ldh_r_a8(uint8_t n, bool twobyte = false) {
 	uint16_t address = 0xFF00 + n;  // Calculate address in HRAM
@@ -675,10 +682,7 @@ void ldh_r_a8(uint8_t n, bool twobyte = false) {
 		cycles += 4;
 		PC++;
 	}
-	printf("LD A, ($FF00+%02X)", n);
-}
-void di() {
-
+	if(debugLogs) printf("LD A, ($FF00+%02X)", n);
 }
 void ld_hl_sp_s8(int8_t offset) {
 
@@ -695,12 +699,12 @@ void ld_hl_sp_s8(int8_t offset) {
 	PC++;
 
 	cycles += 12;
-	printf("LD HL, SP+%+d", offset);
+	if(debugLogs) printf("LD HL, SP+%+d", offset);
 }
 void ld_sp_hl() {
 	SP = HL.full;  // Direct copy
 	cycles += 8;
-	printf("LD SP, HL");
+	if(debugLogs) printf("LD SP, HL");
 }
 void ld_a_a16(uint8_t low, uint8_t high) {
 	// Read 16-bit address (little-endian)
@@ -711,8 +715,7 @@ void ld_a_a16(uint8_t low, uint8_t high) {
 
 	cycles += 16;
 	PC += 2;
-	printf("LD A, ($%04X)", address);
+	if(debugLogs) printf("LD A, ($%04X)", address);
 }
-void ei() {
-
-}
+void ei() { ime_scheduled = 1; }   // schedule, don't set IME yet
+void di() { IME = false; ime_scheduled = -1; }

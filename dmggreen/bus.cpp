@@ -7,7 +7,7 @@
 #include "cpu.h"
 #include "instructions.h"
 
-uint8_t memory[0xffff];
+uint8_t memory[0x10000];
 
 uint8_t ReadBus(uint16_t addr) {
 	if (addr == 0xFF44) {
@@ -44,3 +44,30 @@ void dbg_print() {
         printf("Serial Bus: %s\n", dbg_msg);
     }
 }
+
+void CheckInterrupts() {
+	uint8_t IE = ReadBus(0xFFFF);
+	uint8_t IF = ReadBus(0xFF0F);
+	uint8_t pending = IE & IF & 0x1F;
+
+	if (!IME || pending == 0) return;
+
+	for (int bit = 0; bit < 5; bit++) {
+		if (pending & (1 << bit)) {
+			IME = false;                       // disable further interrupts
+			WriteBus(0xFF0F, IF & ~(1 << bit)); // clear the serviced bit
+			halted = false;                    // wake up if HALTed
+
+			// push current PC like a CALL
+			SP--; WriteBus(SP, (PC >> 8) & 0xFF);
+			SP--; WriteBus(SP, PC & 0xFF);
+
+			static const uint16_t vectors[5] = { 0x40, 0x48, 0x50, 0x58, 0x60 };
+			PC = vectors[bit];
+
+			cycles += 20; // 5 M-cycles
+			break; // only service one, lowest bit = highest priority
+		}
+	}
+}
+

@@ -13,24 +13,47 @@ RegisterPair AF, BC, DE, HL;
 uint16_t SP;
 uint16_t PC = 0x0000;
 bool halted = false;
+bool debugLogs = false;
 int cycles = 0x00;
 uint8_t currentOP;
 const char* OPCODES[0x100] = {
    nullptr
 };
-std::string logdata = "";
-int zaza = 0;
-int zazai = 0;
+
 uint16_t tempPC = 0x00;
 
-bool exportOps = false;
+bool exportOps = true;
+
+
+// in cpu.h/cpu.cpp
+bool IME = false;
+int ime_scheduled = -1; // -1 = nothing pending
+
+
+
+// cpu.cpp — replace logdata/zaza/zazai with this
+static std::ofstream cpuLogFile;
+static int logLineCount = 0;
+constexpr int kLogFlushInterval = 1000; // smaller = safer on crash, costs a bit of perf
+
+void InitCpuLog() {
+	if (!exportOps) return;
+	cpuLogFile.open("cpulogs.log", std::ios::out | std::ios::trunc);
+}
+
+void CloseCpuLog() {
+	if (cpuLogFile.is_open()) {
+		cpuLogFile.flush();
+		cpuLogFile.close();
+	}
+}
 
 void ExecuteOpcode(uint8_t op) {
 	currentOP = op;
 	tempPC = PC - 1;
 	uint8_t tempA, tempF, tempIF, tempIE;
 	uint16_t tempBC, tempDE, tempHL, tempSP;
-	zaza++;
+	
 	tempA = AF.hi;
 	tempF = AF.lo;
 	tempBC = BC.full;
@@ -40,7 +63,7 @@ void ExecuteOpcode(uint8_t op) {
 	//tempIE = bus.IE;
 	tempSP = SP;
 
-
+	if(debugLogs)
 	printf("%04X - 0x%02X - ", tempPC, op);
 	switch (op) {
 	case 0x00: nop(); break;
@@ -371,37 +394,37 @@ void ExecuteOpcode(uint8_t op) {
 
 	
 	configFile.close();*/
-	if (exportOps) {
-		logdata += "A:" + byteToHexString(tempA) + " ";
-		logdata += "F:" + byteToHexString(tempF) + " ";
-		logdata += "B:" + byteToHexString(tempBC >> 8) + " ";
-		logdata += "C:" + byteToHexString(tempBC & 0xFF) + " ";
-		logdata += "D:" + byteToHexString(tempDE >> 8) + " ";
-		logdata += "E:" + byteToHexString(tempDE & 0xFF) + " ";
-		logdata += "H:" + byteToHexString(tempHL >> 8) + " ";
-		logdata += "L:" + byteToHexString(tempHL & 0xFF) + " ";
-		logdata += "SP:" + wordToHexString(tempSP) + " ";
-		logdata += "PC:" + wordToHexString(tempPC) + " ";
-		logdata += "PCMEM:" + byteToHexString(ReadBus(tempPC)) + ",";
-		logdata += byteToHexString(ReadBus(tempPC + 1)) + ",";
-		logdata += byteToHexString(ReadBus(tempPC + 2)) + ",";
-		logdata += byteToHexString(ReadBus(tempPC + 3)) + "\n";
-		if (zaza == (zazai + 3000)) {
-			std::ofstream configFile("cpulogs.log");
-			configFile << logdata << std::endl;
-			configFile.close();
-			zazai = zaza;
+	
+	if (exportOps && cpuLogFile.is_open()) {
+		cpuLogFile << "A:" << byteToHexString(tempA) << " "
+			<< "F:" << byteToHexString(tempF) << " "
+			<< "B:" << byteToHexString(tempBC >> 8) << " "
+			<< "C:" << byteToHexString(tempBC & 0xFF) << " "
+			<< "D:" << byteToHexString(tempDE >> 8) << " "
+			<< "E:" << byteToHexString(tempDE & 0xFF) << " "
+			<< "H:" << byteToHexString(tempHL >> 8) << " "
+			<< "L:" << byteToHexString(tempHL & 0xFF) << " "
+			<< "SP:" << wordToHexString(tempSP) << " "
+			<< "PC:" << wordToHexString(tempPC) << " "
+			<< "PCMEM:" << byteToHexString(ReadBus(tempPC)) << ","
+			<< byteToHexString(ReadBus(tempPC + 1)) << ","
+			<< byteToHexString(ReadBus(tempPC + 2)) << ","
+			<< byteToHexString(ReadBus(tempPC + 3)) << "\n";
+
+		if (++logLineCount >= kLogFlushInterval) {
+			cpuLogFile.flush();
+			logLineCount = 0;
 		}
 	}
-	
-	if ((ReadBus(0xDFF1) == 0xAB) && tempPC == 0xC092) {
-		tempSP;
-		uint8_t lo = ReadBus(0xDFF1);
-		uint8_t hi = ReadBus(0xDFF2);
-	}
 
-	printf(" | A: %02X F: %02X (b%s) BC: %04X DE: %04X HL: %04X SP: %04X\n", AF.hi, AF.lo, std::bitset<8>(AF.lo).to_string().c_str(), BC.full, DE.full, HL.full, SP);
-	
+		if ((ReadBus(0xDFF1) == 0xAB) && tempPC == 0xC092) {
+			tempSP;
+			uint8_t lo = ReadBus(0xDFF1);
+			uint8_t hi = ReadBus(0xDFF2);
+		}
+		if (debugLogs) {
+		printf(" | A: %02X F: %02X (b%s) BC: %04X DE: %04X HL: %04X SP: %04X\n", AF.hi, AF.lo, std::bitset<8>(AF.lo).to_string().c_str(), BC.full, DE.full, HL.full, SP);
+	}
 }
 std::string byteToHexString(uint8_t value) {
 	char buffer[3];
@@ -414,3 +437,6 @@ std::string wordToHexString(uint16_t value) {
 	snprintf(buffer, sizeof(buffer), "%04X", value);
 	return buffer;
 }
+
+
+

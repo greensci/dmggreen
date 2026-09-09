@@ -1,4 +1,4 @@
 ﻿  dmggreen.cpp
-C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
-C:\Users\greens\Documents\GitHub\dmggreen\dmggreen\dmggreen.cpp(72,20): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
-  dmggreen.vcxproj -> C:\Users\greens\Documents\GitHub\dmggreen\x64\Debug\dmggreen.exe
+C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\include\filesystem(12): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+C:\Users\greensci\Documents\GitHub\dmggreen\dmggreen\dmggreen.cpp(69,20): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+  dmggreen.vcxproj -> C:\Users\greensci\Documents\GitHub\dmggreen\x64\Debug\dmggreen.exe
